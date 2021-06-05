@@ -63,14 +63,38 @@ exports.task_add = function (req, res) {
     });
     // res.send('add a project: ' + req.params.id);
 };
-// CREATE TABLE IF NOT EXISTS Tasks (
-//     task_id INTEGER PRIMARY KEY,
-//     description TEXT NOT NULL,
-//     time_duration INTEGER NOT NULL,
-//     created_at TEXT NOT NULL DEFAULT current_timestamp,
-//     invoiced BOOLEAN NOT NULL DEFAULT false,
-//     invoice_id INTEGER,
-//     project_id INTEGER,
-//     FOREIGN KEY (invoice_id) REFERENCES Invoices(invoice_id) ON DELETE CASCADE ON UPDATE NO ACTION,
-//     FOREIGN KEY (project_id) REFERENCES Projects(project_id) ON DELETE CASCADE ON UPDATE NO ACTION
-// );
+
+
+exports.task_update = function (req, res) {
+    const time = req.body.time;
+    const desc = req.body.description;
+    const taskID = req.params.task_id;
+    console.log(time);
+    console.log(desc);
+    console.log(taskID);
+
+    const update_sql = `UPDATE Tasks SET time_duration=?, description=? WHERE task_id=?`;
+
+    db.serialize(function () {
+        // insert one row into the langs table
+        db.run(update_sql, [time, desc, taskID], function (err) {
+            if (err) {
+                return console.log(err.message);
+            }
+        });
+        res.sendStatus(200);
+    });
+};
+
+exports.task_delete = function (req, res) {
+    const taskID = req.params.task_id;
+    const delete_sql = `DELETE FROM Tasks WHERE task_id=?`;
+    db.serialize(function () {
+        db.run(delete_sql, [taskID], function (err) {
+            if (err) {
+                return console.log(err.message);
+            }
+        });
+        res.sendStatus(200);
+    });
+};
