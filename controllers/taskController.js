@@ -1,5 +1,5 @@
-const path = require('path')
-const dbPath = path.resolve(__dirname, '..', 'sql', 'timedb.db')
+const path = require('path');
+const dbPath = path.resolve(__dirname, '..', 'sql', 'timedb.db');
 console.log(__dirname);
 console.log(dbPath);
 var sqlite3 = require('sqlite3').verbose();
@@ -20,31 +20,17 @@ exports.task_list = function (req, res) {
                 throw err;
             }
             data.tasks = rows;
-            //data.push(rows)
-            console.log(data)
-            //res.json(data);
+            console.log(data);
         });
 
         //SELECT * from Clients where client_id=(SELECT client_id FROM Invoices WHERE invoice_id=1)
-        let project_sql = `SELECT * from Projects where project_id=?`
+        let project_sql = `SELECT * from Projects where project_id=?`;
         db.get(project_sql, [id], (err, row) => {
             data.project = row;
-            //console.log(data);
             res.json(data);
         });
-        // let date_sql = `SELECT created_at from Invoices where invoice_id=?`
-        // db.get(date_sql, [id], (err, row) => {
-        //     data.date = row;
-        //     console.log(data);
-        //     res.json(data);
-        // });
     });
 };
-
-
-// exports.task_detail = function (req, res, next) {
-//     res.send('return invoice information id: ' + req.params.id)
-// };
 
 // project/:id
 exports.task_add = function (req, res) {
@@ -53,7 +39,6 @@ exports.task_add = function (req, res) {
     const projectID = req.body.project_id;
     console.log(req.body);
     db.serialize(function () {
-        // insert one row into the langs table
         db.run(`INSERT INTO Tasks(description, time_duration, project_id) VALUES(?,?,?)`, [desc, time, projectID], function (err) {
             if (err) {
                 return console.log(err.message);
@@ -61,7 +46,6 @@ exports.task_add = function (req, res) {
         });
 
     });
-    // res.send('add a project: ' + req.params.id);
 };
 
 
@@ -76,7 +60,6 @@ exports.task_update = function (req, res) {
     const update_sql = `UPDATE Tasks SET time_duration=?, description=? WHERE task_id=?`;
 
     db.serialize(function () {
-        // insert one row into the langs table
         db.run(update_sql, [time, desc, taskID], function (err) {
             if (err) {
                 return console.log(err.message);

@@ -1,5 +1,5 @@
-const path = require('path')
-const dbPath = path.resolve(__dirname, '..', 'sql', 'timedb.db')
+const path = require('path');
+const dbPath = path.resolve(__dirname, '..', 'sql', 'timedb.db');
 console.log(__dirname);
 console.log(dbPath);
 var sqlite3 = require('sqlite3').verbose();
@@ -21,13 +21,11 @@ exports.project_list = function (req, res) {
         });
 
     });
-    // close the database connection
-    //db.close();
 };
 
 // project/:id
 exports.project_detail = function (req, res, next) {
-    res.send('return project information id: ' + req.params.id)
+    res.send('return project information id: ' + req.params.id);
 };
 
 exports.project_add = function (req, res, next) {
@@ -36,14 +34,10 @@ exports.project_add = function (req, res, next) {
     const client = req.body.client;
     console.log(req.body);
     db.serialize(function () {
-        // insert one row into the langs table
         db.run(`INSERT INTO Projects(title, client_id, description) VALUES(?,?,?)`, [title, client, desc], function (err) {
             if (err) {
                 return console.log(err.message);
             }
-            //res.send();
         });
-
     });
-
 };

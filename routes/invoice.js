@@ -11,6 +11,4 @@ router.get('/:id', invoice_controller.invoice_detail);
 
 router.post('/email', invoice_controller.invoice_email);
 
-
-
 module.exports = router;

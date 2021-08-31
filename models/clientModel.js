@@ -6,7 +6,3 @@ class Client {
         console.log(this.id);
     }
 }
-
-let c = new Client(55);
-
-c.print();

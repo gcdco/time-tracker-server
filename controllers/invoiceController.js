@@ -1,6 +1,6 @@
 const axios = require('axios');
-const path = require('path')
-const dbPath = path.resolve(__dirname, '..', 'sql', 'timedb.db')
+const path = require('path');
+const dbPath = path.resolve(__dirname, '..', 'sql', 'timedb.db');
 console.log(__dirname);
 console.log(dbPath);
 var sqlite3 = require('sqlite3').verbose();
@@ -25,9 +25,6 @@ exports.invoice_list = function (req, res) {
         });
 
     });
-    // close the database connection
-    //db.close();
-
 };
 
 //http://localhost:4000/invoice/1
@@ -42,34 +39,26 @@ exports.invoice_detail = function (req, res, next) {
             if (err) {
                 throw err;
             }
-
             data.tasks = rows;
-            //data.push(rows)
-            //console.log(data)
-            //res.json(data);
         });
 
         //SELECT * from Clients where client_id=(SELECT client_id FROM Invoices WHERE invoice_id=1)
-        let client_sql = `SELECT * from Clients where client_id=(SELECT client_id FROM Invoices WHERE invoice_id=?)`
+        let client_sql = `SELECT * from Clients where client_id=(SELECT client_id FROM Invoices WHERE invoice_id=?)`;
         db.get(client_sql, [id], (err, row) => {
             data.client = row;
-            //console.log(data);
-            //res.json(data);
         });
-        let date_sql = `SELECT created_at from Invoices where invoice_id=?`
+        let date_sql = `SELECT created_at from Invoices where invoice_id=?`;
         db.get(date_sql, [id], (err, row) => {
             data.date = row;
             console.log(data);
             res.json(data);
         });
     });
-    // close the database connection
-    //db.close();
 };
 
 //invoice_email
 exports.invoice_email = function (req, res, next) {
-    const url = `http://flip1.engr.oregonstate.edu:9584/`
+    const url = `http://flip1.engr.oregonstate.edu:9584/`;
     let recipient = req.body.recipient;
     let senderName = req.body.senderName;
     let senderEmail = req.body.senderEmail;
@@ -85,6 +74,4 @@ exports.invoice_email = function (req, res, next) {
         "text": text,
         "html": html
     });
-
-
 };
